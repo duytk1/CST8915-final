@@ -1,5 +1,5 @@
 Updated Application Architecture:
-Draw the updated architecture diagram using Draw.io and include it in the README.
+![Diagram](/images/diagram.png)  
 
 Application and Architecture Explanation:
 Briefly explain the application functionality and how the architecture works.
