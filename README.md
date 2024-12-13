@@ -1,103 +1,113 @@
-Updated Application Architecture:
+# Updated Application Architecture
 ![Diagram](/images/diagram.png)  
 
-Application and Architecture Explanation:
+## Application and Architecture Explanation:
 The architecture of this project will work as follows:
-The user can go to the store front page and place an order
-The store-front written in VueJS will render a user interface for them to view the products and add to cart then place the order
-The order will then be sent to order-service in NodeJS which is handled by the order-queue by Azure Service Bus
-The product-service will also handle the order in rust
-The employee of the store can go to the store-admin page which can handle the order in makeline-service written in golang
-For any order that is processed it will be removed from the queue which Azure Service Bus will take care of and remove from the database
-There is also the AI Services that Azure provide with Azure OpenAI that gives us access to GPT4 for description and DALL-E for image generation which will be used on the product page
 
-Deployment Instructions:
+1. The user can go to the store front page and place an order.
+2. The store-front, written in VueJS, will render a user interface for them to view the products, add to cart, and place the order.
+3. The order will then be sent to `order-service` in NodeJS, which is handled by the order-queue via Azure Service Bus.
+4. The `product-service` will also handle the order in Rust.
+5. The employee of the store can go to the `store-admin` page, which can handle the order in `makeline-service` written in Golang.
+6. For any order that is processed, it will be removed from the queue, and Azure Service Bus will take care of removing it from the database.
+7. There is also the AI Services that Azure provides through Azure OpenAI, giving us access to GPT-4 for product descriptions and DALL-E for image generation, which will be used on the product page.
 
-Step 0: install prerequisites
+---
 
-Install kubectl: https://kubernetes.io/docs/tasks/tools/
-Install Python: https://www.python.org/downloads/
-Install node: https://nodejs.org/en/download/package-manager
-Install Azure CLI: https://learn.microsoft.com/en-us/cli/azure/install-azure-cli
+## Deployment Instructions:
 
-Step 1: Create Kubernetes Cluster on Azure:
+### Step 0: Install Prerequisites
 
-Search and go to Kubernetes Services on Azure
-Click Create -> Kubernetes Cluster
+- Install `kubectl`: [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/)
+- Install Python: [Python Download](https://www.python.org/downloads/)
+- Install Node.js: [Node.js Download](https://nodejs.org/en/download/package-manager)
+- Install Azure CLI: [Azure CLI Installation](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 
-![1.0](/images/1.0.png)
+### Step 1: Create Kubernetes Cluster on Azure
 
-![1.1](/images/1.1.png)
+1. Go to **Kubernetes Services** on Azure.
+2. Click **Create** -> **Kubernetes Cluster**.
 
-Choose the following settings:
-Region: Canada Central
-Availability zone: none
-AKS Pricing Tier: free
-Automatic upgrade: disabled
-Node security type channel: none
+   ![1.0](/images/1.0.png)
 
-![1.2](/images/1.2.png)
-Click the Add Node Pool button
+   ![1.1](/images/1.1.png)
 
+3. Choose the following settings:
+   - Region: **Canada Central**
+   - Availability zone: **None**
+   - AKS Pricing Tier: **Free**
+   - Automatic upgrade: **Disabled**
+   - Node security type channel: **None**
 
-![1.3](/images/1.3.png)Choose the following settings:
-Node pool name: workerspool
-OS SKU: Ubuntu Linux
-Node Size: D2as_v4
-Node count: 1
+   ![1.2](/images/1.2.png)
 
-Click on the already existing node to update
+4. Click the **Add Node Pool** button.
 
-Node pool name: masterpool
-OS SKU: Ubuntu Linux
-Node Size: D2as_v4
-Node count: 1
+   ![1.3](/images/1.3.png)
 
-Click Review + Create to create the AKS cluster
+   Choose the following settings:
+   - Node pool name: **workerspool**
+   - OS SKU: **Ubuntu Linux**
+   - Node Size: **D2as_v4**
+   - Node count: **1**
 
-![1.4](/images/1.4.png)
+5. Click on the already existing node to update.
 
-Step 2: Deploy the services
+   - Node pool name: **masterpool**
+   - OS SKU: **Ubuntu Linux**
+   - Node Size: **D2as_v4**
+   - Node count: **1**
 
-Connect to AKS:
-Run command
+6. Click **Review + Create** to create the AKS cluster.
 
-az login
+   ![1.4](/images/1.4.png)
 
-Choose your subscription
+### Step 2: Deploy the Services
 
-Set your subscription to correct subscription with command:
+1. **Connect to AKS:**
+   - Run command:
+     ```bash
+     az login
+     ```
+   - Choose your subscription:
+     ```bash
+     az account set --subscription 'subscription-id'
+     ```
+   - Get credentials for the cluster:
+     ```bash
+     az aks get-credentials --resource-group AlgonquinPetStoreRG --name AlgonquinPetStoreCluster
+     ```
 
-az account set --subscription 'subscribtion-id'
+   Replace `subscription-id`, `AlgonquinPetStoreRG`, and `AlgonquinPetStoreCluster` with your information.
 
-az aks get-credentials --resource-group AlgonquinPetStoreRG --name AlgonquinPetStoreCluster
+2. **Deploy the Algonquin PetStore:**
+   Run the following command:
+   ```bash
+   kubectl apply -f deploymentfiles/algonquin-pet-store-all-in-one.yaml
+    ```
 
-Replace the subscription-id and AlgonquinPetStoreRG and AlgonquinPetStoreCluster with your information
+3. **Verify deployment with commands**:
 
-To deploy the algonquin petstore run the command:
+    kubectl get pods
+    kubectl get services
+    
+4. **Test your storefront and product service**:
 
-kubectl apply -f deploymentfiles/algonquin-pet-store-all-in-one.yaml
+    Go to AKS Cluster -> Services and Ingresses.
+    Visit the external links for store-front and store-admin.
 
-Verify deployment with commands:
+Deploy all other deployment files in the DeploymentFiles folder:
+Run the following command:
+    ```bash
+    kubectl apply -f deploymentfiles/admin-tasks.yaml
+    kubectl apply -f deploymentfiles/aps-all-in-one.yaml
+    kubectl apply -f deploymentfiles/config-maps.yaml
+    kubectl apply -f deploymentfiles/my-deployment.yaml
+    kubectl apply -f deploymentfiles/my-service.yaml
+    ```
+    
 
-kubectl get pods
-kubectl get services
-
-Test your store front and product service:
-
-Go to your AKS Cluster -> Services and Ingresses -> Go to the external links on store front and store admin
-
-![2.1](/images/2.1.png)
-Deploy all other deployment files in the folder DeploymentFiles with commands:
-
-kubectl apply -f deploymentfiles/admin-tasks.yaml
-kubectl apply -f deploymentfiles/aps-all-in-one.yaml
-kubectl apply -f deploymentfiles/config-maps.yaml
-kubectl apply -f deploymentfiles/my-deployment.yaml
-kubectl apply -f deploymentfiles/my-service.yaml
-
-
-
+    
 Table of Microservice Repositories:
 | Service Name      | Link                                                                 |
 |-------------------|----------------------------------------------------------------------|
