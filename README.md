@@ -95,6 +95,7 @@ The architecture of this project will work as follows:
 
     Go to AKS Cluster -> Services and Ingresses.
     Visit the external links for store-front and store-admin.
+![2.1](/images/2.1.png)
 
 5. **Deploy all other deployment files in the DeploymentFiles folder**:
 Run the following commands:
