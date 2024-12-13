@@ -521,9 +521,9 @@ spec:
             - name: AZURE_OPENAI_DEPLOYMENT_NAME # required if using Azure OpenAI
               value: "gpt-4"
             - name: AZURE_OPENAI_ENDPOINT # required if using Azure OpenAI
-              value: "https://truo0-m4d2x463-swedencentral.cognitiveservices.azure.com/"
+              value: "https://truo0-m4membjx-swedencentral.cognitiveservices.azure.com/"
             - name: AZURE_OPENAI_DALLE_ENDPOINT
-              value: "https://truo0-m4d2x463-swedencentral.cognitiveservices.azure.com/"
+              value: "https://truo0-m4membjx-swedencentral.cognitiveservices.azure.com/"
             - name: AZURE_OPENAI_DALLE_DEPLOYMENT_NAME
               value: "dall-e-3"
             - name: OPENAI_API_KEY # always required
