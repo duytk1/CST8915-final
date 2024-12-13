@@ -96,15 +96,15 @@ The architecture of this project will work as follows:
     Go to AKS Cluster -> Services and Ingresses.
     Visit the external links for store-front and store-admin.
 
-Deploy all other deployment files in the DeploymentFiles folder:
-Run the following command:
-    ```bash
+5. **Deploy all other deployment files in the DeploymentFiles folder**:
+Run the following commands:
+
     kubectl apply -f deploymentfiles/admin-tasks.yaml
     kubectl apply -f deploymentfiles/aps-all-in-one.yaml
     kubectl apply -f deploymentfiles/config-maps.yaml
     kubectl apply -f deploymentfiles/my-deployment.yaml
     kubectl apply -f deploymentfiles/my-service.yaml
-    ```
+    
     
 
     
