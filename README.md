@@ -1,7 +1,6 @@
 Updated Application Architecture:
 ![Diagram](/images/diagram.png)  
 
-
 Application and Architecture Explanation:
 Briefly explain the application functionality and how the architecture works.
 
